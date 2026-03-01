@@ -1,5 +1,5 @@
 {
     "routes": [
-      { "src": "/", "dest": "/the-anatomy-of-me.html" }
+      { "src": "/", "dest": "/ahanavirmani.html" }
     ]
   }
