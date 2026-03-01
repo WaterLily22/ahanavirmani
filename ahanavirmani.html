@@ -353,6 +353,136 @@ section:nth-child(even) { background: var(--paper-warm); }
   box-shadow: 0 6px 18px rgba(232,120,159,.18);
 }
 
+/* life pills */
+.life-pills-row { margin-top: 28px; }
+.life-pills-label {
+  font-size: .72rem; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px;
+}
+.life-pills-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.life-pill {
+  padding: 8px 18px; border-radius: 100px;
+  font-size: .83rem; font-weight: 500;
+  border: 1.5px solid var(--teal);
+  color: var(--teal-mid); background: var(--teal-soft);
+  cursor: pointer; transition: all .22s; user-select: none;
+}
+.life-pill:hover {
+  background: var(--teal-mid); color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(53,170,166,.22);
+}
+
+/* prescription modal */
+#rx-modal {
+  position: fixed; inset: 0; z-index: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  pointer-events: none;
+}
+#rx-modal.open { pointer-events: all; }
+
+#rx-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(43,37,53,.45); backdrop-filter: blur(6px);
+  opacity: 0; transition: opacity .3s;
+}
+#rx-modal.open #rx-modal-backdrop { opacity: 1; }
+
+#rx-slip {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 440px;
+  background: #fffef8;
+  border-radius: 12px 12px 8px 8px;
+  box-shadow: 0 32px 80px rgba(43,37,53,.22), 0 2px 8px rgba(232,120,159,.1);
+  transform: scale(.88) translateY(20px);
+  opacity: 0;
+  transition: transform .38s cubic-bezier(.22,1,.36,1), opacity .32s ease;
+  overflow: hidden;
+  /* paper texture lines */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent, transparent 27px,
+    rgba(237,219,232,.35) 27px, rgba(237,219,232,.35) 28px
+  );
+}
+#rx-modal.open #rx-slip { transform: scale(1) translateY(0); opacity: 1; }
+
+/* torn top edge */
+.rx-slip-tear {
+  height: 18px;
+  background: linear-gradient(135deg, var(--pink-mid), var(--teal-mid));
+  position: relative; overflow: hidden;
+}
+.rx-slip-tear::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 12px;
+  background: #fffef8;
+  clip-path: polygon(0% 100%, 2% 0%, 4% 100%, 6% 0%, 8% 100%, 10% 0%, 12% 100%, 14% 0%, 16% 100%, 18% 0%, 20% 100%, 22% 0%, 24% 100%, 26% 0%, 28% 100%, 30% 0%, 32% 100%, 34% 0%, 36% 100%, 38% 0%, 40% 100%, 42% 0%, 44% 100%, 46% 0%, 48% 100%, 50% 0%, 52% 100%, 54% 0%, 56% 100%, 58% 0%, 60% 100%, 62% 0%, 64% 100%, 66% 0%, 68% 100%, 70% 0%, 72% 100%, 74% 0%, 76% 100%, 78% 0%, 80% 100%, 82% 0%, 84% 100%, 86% 0%, 88% 100%, 90% 0%, 92% 100%, 94% 0%, 96% 100%, 98% 0%, 100% 100%);
+}
+
+.rx-slip-inner { padding: 20px 28px 28px; }
+
+.rx-slip-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1.5px dashed var(--border);
+}
+.rx-slip-pharmacy {
+  font-family: var(--serif); font-size: 1.05rem; color: var(--ink);
+}
+.rx-slip-pharmacy span { color: var(--pink-mid); }
+.rx-slip-meta { text-align: right; }
+.rx-slip-date {
+  font-size: .68rem; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.rx-slip-id {
+  font-size: .72rem; color: var(--teal-mid); font-weight: 500; margin-top: 2px;
+}
+
+.rx-symbol {
+  font-family: var(--serif); font-size: 2rem; color: var(--pink);
+  font-style: italic; margin-bottom: 4px; display: block; line-height: 1;
+}
+.rx-slip-title {
+  font-family: var(--serif); font-size: 1.3rem; color: var(--ink);
+  margin-bottom: 16px; font-style: italic;
+}
+
+.rx-items { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.rx-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .9rem; line-height: 1.5; color: var(--ink-muted);
+  padding: 10px 12px;
+  background: white; border-radius: 10px;
+  border: 1px solid var(--border);
+  transition: border-color .2s, transform .15s;
+}
+.rx-item:hover { border-color: var(--pink); transform: translateX(3px); }
+.rx-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.rx-item-text {}
+.rx-item-text strong { display: block; color: var(--ink); font-weight: 600; font-size: .88rem; }
+.rx-item-text span { font-size: .82rem; }
+
+.rx-slip-footer {
+  border-top: 1.5px dashed var(--border); padding-top: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rx-sig {
+  font-family: var(--script); font-style: italic;
+  font-size: 1.1rem; color: var(--ink-muted);
+}
+#rx-modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-warm); border: 1.5px solid var(--border);
+  cursor: pointer; font-size: 1rem; color: var(--ink-muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, color .2s, border-color .2s;
+}
+#rx-modal-close:hover { background: var(--pink-soft); color: var(--pink-mid); border-color: var(--pink); }
+
 /* dept tabs */
 .dept-tabs-grid {
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -689,6 +819,32 @@ footer {
   </div>
 </div>
 
+<!-- prescription modal -->
+<div id="rx-modal">
+  <div id="rx-modal-backdrop"></div>
+  <div id="rx-slip">
+    <div class="rx-slip-tear"></div>
+    <div class="rx-slip-inner">
+      <div class="rx-slip-header">
+        <div>
+          <div class="rx-slip-pharmacy">Ahana's <span>Pharmacy</span></div>
+          <div class="rx-slip-date" id="rx-date"></div>
+        </div>
+        <div class="rx-slip-meta">
+          <div class="rx-slip-id" id="rx-id"></div>
+          <button id="rx-modal-close">✕</button>
+        </div>
+      </div>
+      <span class="rx-symbol">Rₓ</span>
+      <div class="rx-slip-title" id="rx-slip-title"></div>
+      <ul class="rx-items" id="rx-items"></ul>
+      <div class="rx-slip-footer">
+        <div class="rx-sig">Ahana Virmani</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- nav -->
 <nav>
   <a class="nav-logo" href="#">The Anatomy <span>of Me</span></a>
@@ -775,13 +931,24 @@ footer {
         <p>Hi! I'm Ahana, a high school student who's been fascinated by the human body since I was old enough to ask "but why?" about everything.</p>
         <p>I'm drawn to medicine because it sits at the intersection of science and humanity. I want to be the kind of doctor who actually listens, one who sees a whole person, not just a set of symptoms. Outside of studying, I love collecting cute stationary, rewatching comfort shows, and spending too long on aesthetics.</p>
         <p>Currently navigating the beautifully chaotic journey of high school life, one flashcard at a time. 🌸</p>
-        <div class="interests">
+        <!-- <div class="interests">
           <span class="interest-pill">🧬 Anatomy & Physiology</span>
           <span class="interest-pill">🌸 Cute Stationary</span>
           <span class="interest-pill">📚 Workaholic</span>
           <span class="interest-pill">🎵 Pop Music</span>
           <span class="interest-pill">☕️ Coffee Enthusiast</span>
           <span class="interest-pill">📖 Romance Novels</span>
+        </div> -->
+        <div class="life-pills-row">
+          <div class="life-pills-label">✦ A little more about me — tap to open</div>
+          <div class="life-pills-list">
+            <span class="life-pill" data-rx="clubs">🏫 Clubs</span>
+            <span class="life-pill" data-rx="music">🎵 Listening To</span>
+            <span class="life-pill" data-rx="books">📖 Reading</span>
+            <span class="life-pill" data-rx="cooking">🍳 Cooking & Baking</span>
+            <span class="life-pill" data-rx="watching">🎬 Watching</span>
+            <span class="life-pill" data-rx="wanting">🛒 Wanting</span>
+          </div>
         </div>
       </div>
     </div>
@@ -993,6 +1160,111 @@ footer {
 </footer>
 
 <script>
+/* prescription pills */
+const RX_DATA = {
+  clubs: {
+    title: 'Current Clubs & Roles',
+    items: [
+      { icon: '💊', title: 'Medlife', sub: 'President' },
+      { icon: '🩺', title: 'HOSA', sub: 'Vice President' },
+      { icon: '💙', title: "Cam's Kid — Kids Help Phone", sub: 'High School Ambassador' },
+      { icon: '🛴', title: 'Parachute Road Safety', sub: 'Youth Ambassador' },
+      { icon: '📚', title: 'Oakville Public Library', sub: 'Youth Library Leader' },
+      { icon: '💻', title: 'Hack Canada', sub: 'Marketing Executive' },
+    ]
+  },
+  music: {
+    title: 'Currently Listening To',
+    items: [
+      { icon: '🎵', title: 'Add a song or artist', sub: 'Artist name' },
+      { icon: '🎵', title: 'Add a song or artist', sub: 'Artist name' },
+      { icon: '🎵', title: 'Add a song or artist', sub: 'Artist name' },
+      { icon: '🎧', title: 'Add a playlist or album', sub: 'Mood or genre' },
+    ]
+  },
+  books: {
+    title: 'Recently Read',
+    items: [
+      { icon: '📖', title: 'Add a book title', sub: 'Author name' },
+      { icon: '📖', title: 'Add a book title', sub: 'Author name' },
+      { icon: '📖', title: 'Add a book title', sub: 'Author name' },
+      { icon: '📚', title: 'Add a book title', sub: 'Author name' },
+    ]
+  },
+  cooking: {
+    title: 'Recently Cooked & Baked',
+    items: [
+      { icon: '🍳', title: 'Add something you made', sub: 'When or occasion' },
+      { icon: '🧁', title: 'Add something you baked', sub: 'When or occasion' },
+      { icon: '🍝', title: 'Add something you made', sub: 'When or occasion' },
+      { icon: '🍰', title: 'Add something you baked', sub: 'When or occasion' },
+    ]
+  },
+  watching: {
+    title: 'Currently Watching',
+    items: [
+      { icon: '🎬', title: 'Add a show or movie', sub: 'Platform · genre' },
+      { icon: '📺', title: 'Add a show or movie', sub: 'Platform · genre' },
+      { icon: '🎥', title: 'Add a show or movie', sub: 'Platform · genre' },
+    ]
+  },
+  wanting: {
+    title: 'On My Wishlist',
+    items: [
+      { icon: '🛍️', title: 'Add something you want', sub: 'Why you want it' },
+      { icon: '✈️', title: 'A place you want to visit', sub: 'Travel goals' },
+      { icon: '📦', title: 'Add something you want', sub: 'Why you want it' },
+      { icon: '🌸', title: 'Add something you want', sub: 'Why you want it' },
+    ]
+  }
+};
+
+const rxModal = document.getElementById('rx-modal');
+const rxModalBackdrop = document.getElementById('rx-modal-backdrop');
+const rxModalClose = document.getElementById('rx-modal-close');
+const rxSlipTitle = document.getElementById('rx-slip-title');
+const rxItems = document.getElementById('rx-items');
+const rxDate = document.getElementById('rx-date');
+const rxId = document.getElementById('rx-id');
+
+function openRx(key) {
+  const data = RX_DATA[key];
+  if (!data) return;
+
+  rxSlipTitle.textContent = data.title;
+  rxDate.textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+  rxId.textContent = 'Rx #' + Math.floor(1000 + Math.random() * 9000);
+
+  rxItems.innerHTML = '';
+  data.items.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'rx-item';
+    li.style.animationDelay = (i * 0.06) + 's';
+    li.innerHTML = `
+      <span class="rx-item-icon">${item.icon}</span>
+      <div class="rx-item-text">
+        <strong>${item.title}</strong>
+        <span>${item.sub}</span>
+      </div>`;
+    rxItems.appendChild(li);
+  });
+
+  rxModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRx() {
+  rxModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.life-pill').forEach(pill => {
+  pill.addEventListener('click', () => openRx(pill.dataset.rx));
+});
+rxModalClose.addEventListener('click', closeRx);
+rxModalBackdrop.addEventListener('click', closeRx);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRx(); });
+
 /*  experience data */
 const DEPTS = {
   clinical: {
