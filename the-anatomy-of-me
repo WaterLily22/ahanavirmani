@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Anatomy of Me</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --pink:       #f2a7c3;
+  --pink-soft:  #fceef5;
+  --pink-mid:   #e8789f;
+  --pink-deep:  #c95480;
+  --teal:       #62ccc8;
+  --teal-soft:  #e4f7f6;
+  --teal-mid:   #35aaa6;
+  --ink:        #2b2535;
+  --ink-muted:  #7c7387;
+  --paper:      #fdfaf7;
+  --paper-warm: #f7f1ec;
+  --border:     #eddbe8;
+  --serif:      'DM Serif Display', serif;
+  --sans:       'DM Sans', sans-serif;
+  --script:     'Instrument Serif', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* cursor */
+#cur {
+  width: 12px; height: 12px;
+  background: var(--pink-mid);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .18s, height .18s, background .2s, opacity .2s;
+  mix-blend-mode: multiply;
+}
+#cur.hover { width: 36px; height: 36px; background: var(--teal); opacity: .45; }
+
+/* click bursts */
+.burst {
+  position: fixed; pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  animation: burst-out .7s ease forwards;
+  font-size: 1.1rem; line-height: 1;
+}
+@keyframes burst-out {
+  0%   { opacity: 1; transform: translate(-50%,-50%) scale(.4); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, calc(-50% - 60px)) scale(1.1); }
+}
+
+/* floating petals */
+#petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.petal {
+  position: absolute; bottom: -30px;
+  font-size: 1rem; opacity: 0;
+  animation: petal-rise linear forwards;
+}
+@keyframes petal-rise {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg) scale(.8); }
+  8%   { opacity: .55; }
+  90%  { opacity: .35; }
+  100% { opacity: 0; transform: translateY(-110vh) rotate(540deg) scale(1.1); }
+}
+
+/* shimmer utility */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.shimmer-border {
+  position: relative;
+}
+.shimmer-border::after {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0%, rgba(242,167,195,.6) 40%, rgba(98,204,200,.6) 60%, transparent 100%);
+  background-size: 400px 100%;
+  animation: shimmer 3s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 1.5px;
+}
+
+/* nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(253,250,247,.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
+  animation: nav-drop .7s cubic-bezier(.22,1,.36,1) .15s forwards;
+}
+@keyframes nav-drop { to { transform: translateY(0); } }
+.nav-logo {
+  font-family: var(--serif); font-size: 1.15rem;
+  color: var(--ink); text-decoration: none;
+}
+.nav-logo span { color: var(--pink-mid); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: .82rem; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-muted); text-decoration: none;
+  transition: color .2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; left: 0; bottom: -3px; right: 0; height: 1.5px;
+  background: var(--pink-mid); transform: scaleX(0);
+  transform-origin: left; transition: transform .25s;
+}
+.nav-links a:hover { color: var(--pink-mid); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* hero */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  padding: 130px 80px 90px;
+  gap: 60px; align-items: center;
+  position: relative; overflow: hidden;
+  background: var(--paper);
+}
+/* soft radial glow */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 60% at 75% 50%, var(--pink-soft) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 40% at 20% 80%, var(--teal-soft) 0%, transparent 65%);
+}
+/* grain */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  background-size: 180px; pointer-events: none;
+}
+.hero-left, .hero-right { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .75rem; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--teal-mid);
+  background: var(--teal-soft); padding: 6px 16px; border-radius: 100px;
+  margin-bottom: 28px;
+  opacity: 0; animation: fade-up .5s ease .35s forwards;
+}
+.hero-name {
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 5.5vw, 5.2rem);
+  line-height: 1.04; letter-spacing: -.02em; color: var(--ink);
+  opacity: 0; animation: fade-up .75s ease .55s forwards;
+}
+.hero-name em { font-style: italic; color: var(--pink-mid); display: block; }
+
+.hero-sub {
+  font-family: var(--script); font-style: italic;
+  font-size: 1.2rem; color: var(--ink-muted);
+  margin-top: 20px; margin-bottom: 40px;
+  line-height: 1.7; max-width: 400px;
+  opacity: 0; animation: fade-up .75s ease .75s forwards;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: white;
+  padding: 14px 30px; border-radius: 100px;
+  font-size: .88rem; font-weight: 500; letter-spacing: .04em;
+  text-decoration: none; transition: background .25s, transform .2s, box-shadow .25s;
+  opacity: 0; animation: fade-up .75s ease .95s forwards;
+}
+.hero-cta:hover {
+  background: var(--pink-mid);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(232,120,159,.35);
+}
+.hero-cta .arrow { transition: transform .2s; display: inline-block; }
+.hero-cta:hover .arrow { transform: translateX(5px); }
+
+/* chart card */
+.chart-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 24px 64px rgba(43,37,53,.07), 0 4px 16px rgba(232,120,159,.08);
+  opacity: 0; animation: fade-left .85s cubic-bezier(.22,1,.36,1) .65s forwards;
+  position: relative; overflow: hidden;
+}
+/* top stripe */
+.chart-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--pink-mid), var(--teal-mid), var(--pink-mid));
+  background-size: 200% 100%;
+  animation: stripe-flow 4s linear infinite;
+}
+@keyframes stripe-flow {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.chart-card-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.chart-card-label {
+  font-size: .7rem; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-muted); margin-bottom: 4px;
+}
+.chart-card-name { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); }
+
+.status-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--teal-soft); color: var(--teal-mid);
+  font-size: .75rem; font-weight: 500;
+  padding: 6px 14px; border-radius: 100px;
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--teal-mid);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.6); opacity: .5; }
+}
+
+.vitals-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vital {
+  background: var(--paper-warm); border-radius: 14px; padding: 16px;
+  border: 1px solid var(--border);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.vital:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(232,120,159,.12);
+  border-color: var(--pink);
+}
+.vital-label { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+.vital-value { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); }
+
+/* ecg */
+.ecg-row {
+  margin-top: 16px; background: #1c1728; border-radius: 14px;
+  padding: 14px 18px; overflow: hidden; position: relative;
+}
+.ecg-top {
+  font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--teal); opacity: .65; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.ecg-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+  animation: pulse-dot 1.4s ease-in-out infinite;
+  display: inline-block;
+}
+#ecg-canvas { width: 100%; height: 48px; display: block; }
+
+/* sections */
+section { padding: 100px 80px; position: relative; }
+section:nth-child(even) { background: var(--paper-warm); }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .72rem; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--pink-mid); margin-bottom: 16px;
+}
+.section-tag::before {
+  content: ''; display: block;
+  width: 28px; height: 1.5px; background: var(--pink-mid);
+}
+.section-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 2.9rem);
+  line-height: 1.15; letter-spacing: -.02em; color: var(--ink); margin-bottom: 16px;
+}
+.section-heading em { font-style: italic; color: var(--pink-mid); }
+.section-body { font-size: 1.05rem; line-height: 1.85; color: var(--ink-muted); max-width: 560px; }
+
+/* about */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: start; margin-top: 60px;
+}
+.about-photo-frame {
+  aspect-ratio: 4/5;
+  background: linear-gradient(145deg, var(--pink-soft), var(--teal-soft));
+  border-radius: 28px; border: 1.5px solid var(--border);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  color: var(--ink-muted); font-size: .8rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.about-photo-frame:hover {
+  transform: scale(1.015);
+  box-shadow: 0 20px 50px rgba(232,120,159,.15);
+}
+.about-photo-frame span { font-size: 3rem; }
+/* rotating border glow on hover */
+.about-photo-frame::after {
+  content: '';
+  position: absolute; inset: -3px; border-radius: 30px;
+  background: conic-gradient(var(--pink-mid), var(--teal-mid), var(--pink-mid));
+  z-index: -1; opacity: 0;
+  animation: spin 4s linear infinite;
+  transition: opacity .3s;
+}
+.about-photo-frame:hover::after { opacity: .4; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.about-text { padding-top: 12px; }
+.about-text p { font-size: 1.05rem; line-height: 1.9; color: var(--ink-muted); margin-bottom: 20px; }
+.about-text p:first-of-type {
+  font-family: var(--script); font-style: italic; font-size: 1.25rem; color: var(--ink);
+}
+
+.interests { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.interest-pill {
+  padding: 8px 18px; border-radius: 100px;
+  font-size: .83rem; font-weight: 500;
+  border: 1.5px solid var(--border);
+  color: var(--ink-muted); background: white;
+  transition: all .22s; cursor: default;
+}
+.interest-pill:hover {
+  border-color: var(--pink); color: var(--pink-mid);
+  background: var(--pink-soft); transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(232,120,159,.18);
+}
+
+/* timeline */
+.timeline { margin-top: 60px; position: relative; }
+.timeline::before {
+  content: '';
+  position: absolute; left: 0; top: 8px; bottom: 0;
+  width: 1.5px; background: linear-gradient(to bottom, var(--pink), var(--teal));
+}
+.timeline-item {
+  display: grid; grid-template-columns: 180px 1fr;
+  gap: 40px; padding: 0 0 52px 32px;
+  position: relative;
+  opacity: 0; transform: translateX(-18px);
+  transition: opacity .55s, transform .55s;
+}
+.timeline-item.visible { opacity: 1; transform: translateX(0); }
+.timeline-item::before {
+  content: '';
+  position: absolute; left: -5.5px; top: 8px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--paper); border: 2.5px solid var(--pink-mid);
+  transition: background .2s, transform .2s;
+}
+.timeline-item:hover::before { background: var(--pink-mid); transform: scale(1.25); }
+.timeline-item.teal-dot::before { border-color: var(--teal-mid); }
+.timeline-item.teal-dot:hover::before { background: var(--teal-mid); }
+
+.timeline-date { font-size: .75rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+.timeline-type {
+  display: inline-block; font-size: .7rem; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+  background: var(--pink-soft); color: var(--pink-mid);
+}
+.timeline-type.teal { background: var(--teal-soft); color: var(--teal-mid); }
+.timeline-role { font-family: var(--serif); font-size: 1.35rem; color: var(--ink); margin-bottom: 4px; }
+.timeline-org { font-size: .88rem; font-weight: 500; color: var(--ink-muted); margin-bottom: 12px; }
+.timeline-desc { font-size: .95rem; line-height: 1.8; color: var(--ink-muted); }
+
+/* goals */
+.goals-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px; margin-top: 60px; align-items: start;
+}
+.rx-card {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 24px; padding: 36px; position: relative;
+  transition: box-shadow .3s;
+}
+.rx-card:hover { box-shadow: 0 20px 50px rgba(43,37,53,.08); }
+.rx-card::before {
+  content: 'Rₓ';
+  position: absolute; top: 20px; right: 28px;
+  font-family: var(--serif); font-size: 2.8rem;
+  color: var(--border); line-height: 1;
+}
+.rx-card-title { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); margin-bottom: 20px; }
+.rx-list { list-style: none; }
+.rx-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: .95rem; line-height: 1.6; color: var(--ink-muted);
+  transition: color .2s, padding-left .2s;
+}
+.rx-list li:hover { color: var(--ink); padding-left: 4px; }
+.rx-list li:last-child { border-bottom: none; }
+.rx-check { color: var(--teal-mid); font-size: .85rem; margin-top: 2px; flex-shrink: 0; }
+
+.short-term-list { display: flex; flex-direction: column; gap: 14px; }
+.goal-item {
+  display: flex; align-items: center; gap: 16px;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 18px 20px;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.goal-item:hover {
+  border-color: var(--pink);
+  transform: translateX(5px);
+  box-shadow: 0 8px 24px rgba(232,120,159,.12);
+}
+.goal-num {
+  font-family: var(--serif); font-size: 1.6rem;
+  color: var(--pink-soft); line-height: 1; flex-shrink: 0; min-width: 28px;
+}
+.goal-text { font-size: .93rem; line-height: 1.5; color: var(--ink-muted); }
+.goal-text strong { display: block; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+
+/* contact */
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center; margin-top: 60px;
+}
+.contact-quote {
+  font-family: var(--script); font-style: italic;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  line-height: 1.55; color: var(--ink);
+  position: relative; padding-left: 28px;
+}
+.contact-quote::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(to bottom, var(--pink-mid), var(--teal-mid));
+  border-radius: 2px;
+}
+.contact-links { display: flex; flex-direction: column; gap: 14px; }
+.contact-link {
+  display: flex; align-items: center; gap: 16px;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 18px 22px;
+  text-decoration: none; color: var(--ink);
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.contact-link:hover {
+  border-color: var(--pink);
+  transform: translateX(7px);
+  box-shadow: 0 10px 28px rgba(232,120,159,.13);
+}
+.contact-icon { font-size: 1.3rem; flex-shrink: 0; }
+.contact-platform { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
+.contact-handle { font-family: var(--serif); font-size: 1.05rem; }
+
+/* footer */
+footer {
+  padding: 36px 80px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .8rem; color: var(--ink-muted);
+  background: var(--paper);
+}
+.footer-heart {
+  display: inline-block;
+  animation: heartbeat 1.4s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  14%      { transform: scale(1.3); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.2); }
+}
+
+/* scroll reveal */
+.reveal {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* keyframes */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-left {
+  from { opacity: 0; transform: translateX(26px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding: 110px 28px 64px; }
+  .hero::before { background: radial-gradient(ellipse 80% 40% at 50% 20%, var(--pink-soft), transparent 70%); }
+  section { padding: 72px 28px; }
+  .about-grid, .goals-layout, .contact-layout { grid-template-columns: 1fr; gap: 36px; }
+  .timeline-item { grid-template-columns: 1fr; gap: 6px; }
+  nav { padding: 16px 24px; }
+  footer { padding: 24px 28px; flex-direction: column; gap: 8px; text-align: center; }
+}
+@media (max-width: 540px) {
+  .nav-links { display: none; }
+  .vitals-row { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="petals"></div>
+
+<!-- nav -->
+<nav>
+  <a class="nav-logo" href="#">The Anatomy <span>of Me</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">🩺 Patient File · Health Sciences</div>
+    <h1 class="hero-name">
+      Ahana
+      <em>Future Doctor.</em>
+    </h1>
+    <p class="hero-sub">
+      A health sciences student with a deep curiosity for the human body, a love for cute things, and a heart set on healing the world, one patient at a time.
+    </p>
+    <a href="#about" class="hero-cta">
+      Read my chart <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <div class="hero-right">
+    <div class="chart-card shimmer-border">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-label">Patient File #2025</div>
+          <div class="chart-card-name">Ahana Virmani</div>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Thriving
+        </div>
+      </div>
+
+      <div class="vitals-row">
+        <div class="vital">
+          <div class="vital-label">Major</div>
+          <div class="vital-value">Health Sciences</div>
+        </div>
+        <div class="vital">
+          <div class="vital-label">Specialisation</div>
+          <div class="vital-value">Pre-Medicine</div>
+        </div>
+        <div class="vital">
+          <div class="vital-label">Fuel of Choice</div>
+          <div class="vital-value">Iced Matcha</div>
+        </div>
+        <div class="vital">
+          <div class="vital-label">Aesthetic</div>
+          <div class="vital-value">Pink & Teal ✨</div>
+        </div>
+      </div>
+
+      <div class="ecg-row">
+        <div class="ecg-top">
+          <span class="ecg-live-dot"></span>
+          Live Vitals — Normal Sinus Rhythm
+        </div>
+        <canvas id="ecg-canvas" height="48"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag reveal">About</div>
+    <h2 class="section-heading reveal">Chief <em>Complaint</em></h2>
+    <p class="section-body reveal">A little bit about who I am, where I come from, and what makes me, me.</p>
+
+    <div class="about-grid">
+      <div class="about-photo-frame reveal">
+        <span>📷</span>
+        Your photo here
+      </div>
+      <div class="about-text reveal">
+        <p>Hi! I'm [Your Name] — a health sciences student who's been fascinated by the human body since I was old enough to ask "but why?" about everything.</p>
+        <p>I'm drawn to medicine because it sits at the intersection of science and humanity. I want to be the kind of doctor who actually listens — who sees a whole person, not just a set of symptoms. Outside of studying, I love collecting cute stationery, rewatching comfort shows, and spending too long on aesthetics.</p>
+        <p>Currently navigating the beautifully chaotic journey of pre-med life, one anatomy flashcard at a time. 🌸</p>
+        <div class="interests">
+          <span class="interest-pill">🧬 Anatomy & Physiology</span>
+          <span class="interest-pill">🌸 Cute Stationery</span>
+          <span class="interest-pill">📚 Studyblr</span>
+          <span class="interest-pill">🎵 Lo-fi Music</span>
+          <span class="interest-pill">🩺 Patient Advocacy</span>
+          <span class="interest-pill">☕ Matcha Enthusiast</span>
+          <span class="interest-pill">🌿 Houseplants</span>
+          <span class="interest-pill">💊 Medical Podcasts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag reveal">Experience</div>
+    <h2 class="section-heading reveal">Medical <em>History</em></h2>
+    <p class="section-body reveal">The experiences, roles, and moments that have shaped my path toward medicine.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Sep 2024 – Present</div>
+          <span class="timeline-type">Volunteer</span>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-role">Hospital Volunteer</div>
+          <div class="timeline-org">City General Hospital · Patient Services</div>
+          <p class="timeline-desc">Assisted nursing staff and provided support to patients on the wards. Developed a genuine understanding of the hospital environment and the importance of compassionate patient interaction.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item teal-dot">
+        <div class="timeline-meta">
+          <div class="timeline-date">Jun 2024</div>
+          <span class="timeline-type teal">Shadowing</span>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-role">Clinical Shadowing</div>
+          <div class="timeline-org">Family Medicine Practice</div>
+          <p class="timeline-desc">Observed consultations across a range of cases, from routine check-ups to complex chronic disease management. Witnessed first-hand the diagnostic reasoning and patient communication skills that define excellent care.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">2023 – 2024</div>
+          <span class="timeline-type">Leadership</span>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-role">President, Pre-Med Society</div>
+          <div class="timeline-org">University · Student Clubs</div>
+          <p class="timeline-desc">Organised speaker events, study sessions, and a hospital visit program for over 80 student members. Developed leadership, event planning, and public speaking skills along the way.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item teal-dot">
+        <div class="timeline-meta">
+          <div class="timeline-date">Summer 2023</div>
+          <span class="timeline-type teal">Research</span>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-role">Research Assistant</div>
+          <div class="timeline-org">Dept. of Epidemiology</div>
+          <p class="timeline-desc">Assisted with data collection and literature reviews for a study on health equity in underserved communities. Co-authored a section of a conference poster presentation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOALS -->
+<section id="goals">
+  <div class="section-inner">
+    <div class="section-tag reveal">Goals</div>
+    <h2 class="section-heading reveal">Treatment <em>Plan</em></h2>
+    <p class="section-body reveal">Where I'm headed, what I'm working toward, and the things I'm doing right now to get there.</p>
+
+    <div class="goals-layout">
+      <div class="rx-card reveal">
+        <div class="rx-card-title">Long-Term Prescription 🩺</div>
+        <ul class="rx-list">
+          <li><span class="rx-check">✦</span> Gain admission to medical school and complete my MD</li>
+          <li><span class="rx-check">✦</span> Complete a residency in a specialty I love (leaning internal medicine or paediatrics)</li>
+          <li><span class="rx-check">✦</span> Work in a setting that prioritises underserved and vulnerable populations</li>
+          <li><span class="rx-check">✦</span> Contribute to medical research that actually improves patient lives</li>
+          <li><span class="rx-check">✦</span> Mentor the next generation of future doctors who look like me 🌸</li>
+        </ul>
+      </div>
+
+      <div class="short-term-list">
+        <div class="goal-item reveal">
+          <div class="goal-num">01</div>
+          <div class="goal-text">
+            <strong>Ace the MCAT</strong>
+            Studying methodically, section by section. Building a system that actually works for my learning style.
+          </div>
+        </div>
+        <div class="goal-item reveal">
+          <div class="goal-num">02</div>
+          <div class="goal-text">
+            <strong>Grow my clinical hours</strong>
+            Continuing to volunteer and shadow so I understand the real world of medicine, not just the textbook version.
+          </div>
+        </div>
+        <div class="goal-item reveal">
+          <div class="goal-num">03</div>
+          <div class="goal-text">
+            <strong>Build meaningful research experience</strong>
+            Looking for opportunities to contribute to health sciences research in a meaningful, hands-on way.
+          </div>
+        </div>
+        <div class="goal-item reveal">
+          <div class="goal-num">04</div>
+          <div class="goal-text">
+            <strong>Stay well & balanced</strong>
+            Protecting my own mental health and wellbeing — because good doctors take care of themselves too.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background: var(--paper);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Contact</div>
+    <h2 class="section-heading reveal">Refer a <em>Friend</em></h2>
+    <p class="section-body reveal">Always happy to connect — whether you're a fellow pre-med, a curious human, or just stumbled in here. 💕</p>
+
+    <div class="contact-layout">
+      <div class="contact-quote reveal">
+        "The good physician treats the disease; the great physician treats the patient who has the disease."
+        <br><br>
+        <span style="font-family:var(--sans);font-style:normal;font-size:.85rem;color:var(--ink-muted);letter-spacing:.04em;">— William Osler</span>
+      </div>
+
+      <div class="contact-links">
+        <a href="mailto:you@email.com" class="contact-link reveal">
+          <span class="contact-icon">✉️</span>
+          <div class="contact-info">
+            <div class="contact-platform">Email</div>
+            <div class="contact-handle">you@email.com</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link reveal">
+          <span class="contact-icon">📷</span>
+          <div class="contact-info">
+            <div class="contact-platform">Instagram</div>
+            <div class="contact-handle">@yourhandle</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link reveal">
+          <span class="contact-icon">💼</span>
+          <div class="contact-info">
+            <div class="contact-platform">LinkedIn</div>
+            <div class="contact-handle">Your Name</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link reveal">
+          <span class="contact-icon">🎵</span>
+          <div class="contact-info">
+            <div class="contact-platform">TikTok</div>
+            <div class="contact-handle">@yourhandle</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 · The Anatomy of Me</span>
+  <span>Made with <span class="footer-heart">💕</span> & a deep love for medicine</span>
+</footer>
+
+<script>
+/* ── CURSOR ─────────────────────────────────────────── */
+const cur = document.getElementById('cur');
+let mx = -100, my = -100;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+document.querySelectorAll('a, .vital, .goal-item, .contact-link, .interest-pill, .rx-list li').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+});
+
+/* ── CLICK HEARTS / BURSTS ───────────────────────────── */
+const burstEmojis = ['💕','🩷','🌸','✨','💫','🩺','💗','⭐','🌷','💖'];
+document.addEventListener('click', e => {
+  // spawn 3 bursts at slightly varied positions
+  for (let i = 0; i < 3; i++) {
+    const el = document.createElement('div');
+    el.className = 'burst';
+    el.textContent = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+    const ox = (Math.random() - .5) * 40;
+    const oy = (Math.random() - .5) * 20;
+    el.style.left = (e.clientX + ox) + 'px';
+    el.style.top  = (e.clientY + oy) + 'px';
+    el.style.animationDelay = (i * 0.08) + 's';
+    el.style.fontSize = (.8 + Math.random() * .7) + 'rem';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 900);
+  }
+});
+
+/* ── FLOATING PETALS ────────────────────────────────── */
+const petalContainer = document.getElementById('petals');
+const petalGlyphs = ['🌸','🌷','✿','❀','🩷','💮'];
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = petalGlyphs[Math.floor(Math.random() * petalGlyphs.length)];
+  el.style.left = (Math.random() * 100) + 'vw';
+  el.style.fontSize = (.6 + Math.random() * .7) + 'rem';
+  const dur = 12 + Math.random() * 10;
+  el.style.animationDuration = dur + 's';
+  el.style.animationDelay = '0s';
+  petalContainer.appendChild(el);
+  setTimeout(() => el.remove(), dur * 1000 + 500);
+}
+// initial burst
+for (let i = 0; i < 8; i++) setTimeout(spawnPetal, i * 600);
+// continuous drip
+setInterval(spawnPetal, 2200);
+
+/* ── LOOPING ECG CANVAS ──────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('ecg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Build one ECG "beat" as relative y-values (normalised 0–1, 0.5 = baseline)
+  const beat = [
+    // flat lead-in
+    ...Array(18).fill(0.5),
+    // P wave
+    0.48, 0.45, 0.43, 0.45, 0.48,
+    // flat
+    0.5, 0.5, 0.5,
+    // Q dip
+    0.53, 0.57,
+    // R spike
+    0.45, 0.18, 0.12, 0.18, 0.45,
+    // S dip
+    0.62, 0.68, 0.62,
+    // flat ST
+    0.52, 0.5, 0.5, 0.5, 0.5,
+    // T wave
+    0.46, 0.42, 0.40, 0.42, 0.46,
+    // flat tail
+    ...Array(20).fill(0.5),
+  ];
+
+  const BEAT_W = beat.length; // px per beat
+  const NUM_BEATS = 6;
+  const totalPoints = beat.length * NUM_BEATS;
+  const allPoints = [];
+  for (let i = 0; i < NUM_BEATS; i++) allPoints.push(...beat);
+
+  let offset = 0;
+  const SPEED = 1.2; // px per frame
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // glow pass
+    ctx.save();
+    ctx.shadowColor = 'rgba(242,167,195,.7)';
+    ctx.shadowBlur  = 8;
+    ctx.strokeStyle = '#f2a7c3';
+    ctx.lineWidth   = 3.5;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+    ctx.beginPath();
+
+    const visibleCount = Math.ceil(W / 1) + 2;
+    for (let px = 0; px < visibleCount; px++) {
+      const dataIdx = ((Math.floor(offset) + px) % totalPoints + totalPoints) % totalPoints;
+      const y = allPoints[dataIdx] * H;
+      if (px === 0) ctx.moveTo(px, y);
+      else          ctx.lineTo(px, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // crisp pink line on top
+    ctx.save();
+    ctx.strokeStyle = '#e8789f';
+    ctx.lineWidth   = 2;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+    ctx.beginPath();
+    for (let px = 0; px < visibleCount; px++) {
+      const dataIdx = ((Math.floor(offset) + px) % totalPoints + totalPoints) % totalPoints;
+      const y = allPoints[dataIdx] * H;
+      if (px === 0) ctx.moveTo(px, y);
+      else          ctx.lineTo(px, y);
+    }
+    ctx.stroke();
+
+    // moving dot at right edge
+    const dotDataIdx = ((Math.floor(offset) + W - 1) % totalPoints + totalPoints) % totalPoints;
+    const dotY = allPoints[dotDataIdx] * H;
+    ctx.shadowColor = 'rgba(98,204,200,.9)';
+    ctx.shadowBlur  = 10;
+    ctx.fillStyle   = '#62ccc8';
+    ctx.beginPath();
+    ctx.arc(W - 2, dotY, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    offset = (offset + SPEED) % totalPoints;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── SCROLL REVEAL ───────────────────────────────────── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .timeline-item').forEach(el => ro.observe(el));
+
+// stagger children in lists
+document.querySelectorAll('.contact-links, .short-term-list, .interests').forEach(parent => {
+  [...parent.children].forEach((child, i) => {
+    child.style.transitionDelay = (i * 0.08) + 's';
+  });
+});
+</script>
+
+</body>
+</html>
