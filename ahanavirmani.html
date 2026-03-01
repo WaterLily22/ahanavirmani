@@ -353,7 +353,7 @@ section:nth-child(even) { background: var(--paper-warm); }
   box-shadow: 0 6px 18px rgba(232,120,159,.18);
 }
 
-/* ── DEPT TABS ──────────────────────────────────────── */
+/* dept tabs */
 .dept-tabs-grid {
   display: grid; grid-template-columns: repeat(5, 1fr);
   gap: 14px; margin-top: 52px;
@@ -383,7 +383,7 @@ section:nth-child(even) { background: var(--paper-warm); }
 }
 .dept-tab-count.teal { background: var(--teal-soft); color: var(--teal-mid); }
 
-/* ── RECORDS DRAWER ─────────────────────────────────── */
+/* records drawer */
 #records-drawer {
   position: fixed; inset: 0; z-index: 600;
   display: flex; align-items: flex-end; justify-content: center;
@@ -437,7 +437,7 @@ section:nth-child(even) { background: var(--paper-warm); }
 #drawer-body::-webkit-scrollbar { width: 5px; }
 #drawer-body::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
 
-/* ── RECORD CARD ────────────────────────────────────── */
+/* record card */
 .record-card {
   background: white; border: 1.5px solid var(--border); border-radius: 18px;
   padding: 22px 24px; display: grid; grid-template-columns: 48px 1fr;
@@ -543,7 +543,7 @@ section:nth-child(even) { background: var(--paper-warm); }
 .contact-platform { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
 .contact-handle { font-family: var(--serif); font-size: 1.05rem; }
 
-/* ACCOMPLISHMENTS */
+/* accomplishments */
 .awards-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 20px; margin-top: 56px;
@@ -571,13 +571,13 @@ section:nth-child(even) { background: var(--paper-warm); }
   background-size: 200% 100%;
   animation: stripe-flow 4s linear infinite;
 }
-/* faint watermark */
+/* faint watermark
 .award-card::after {
   content: '✦';
   position: absolute; bottom: -10px; right: 10px;
   font-size: 5rem; color: var(--border); line-height: 1;
   pointer-events: none;
-}
+} */
 .award-seal {
   width: 56px; height: 56px; border-radius: 50%;
   background: linear-gradient(135deg, var(--pink-soft), var(--teal-soft));
