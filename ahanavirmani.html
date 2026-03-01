@@ -543,6 +543,75 @@ section:nth-child(even) { background: var(--paper-warm); }
 .contact-platform { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
 .contact-handle { font-family: var(--serif); font-size: 1.05rem; }
 
+/* ACCOMPLISHMENTS */
+.awards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin-top: 56px;
+}
+@media (max-width: 780px) { .awards-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .awards-grid { grid-template-columns: 1fr; } }
+
+.award-card {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 28px 24px;
+  position: relative; overflow: hidden;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  text-align: center;
+}
+.award-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 48px rgba(232,120,159,.14);
+  border-color: var(--pink);
+}
+/* shimmer line at top */
+.award-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--pink-mid), var(--teal-mid), var(--pink-mid));
+  background-size: 200% 100%;
+  animation: stripe-flow 4s linear infinite;
+}
+/* faint watermark */
+.award-card::after {
+  content: '✦';
+  position: absolute; bottom: -10px; right: 10px;
+  font-size: 5rem; color: var(--border); line-height: 1;
+  pointer-events: none;
+}
+.award-seal {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-soft), var(--teal-soft));
+  border: 2px solid var(--pink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; margin: 0 auto 16px;
+  transition: transform .3s;
+}
+.award-card:hover .award-seal { transform: rotate(10deg) scale(1.1); }
+.award-seal.teal { background: linear-gradient(135deg, var(--teal-soft), var(--pink-soft)); border-color: var(--teal); }
+
+.award-category {
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-muted); margin-bottom: 8px; font-weight: 500;
+}
+.award-title {
+  font-family: var(--serif); font-size: 1.08rem; color: var(--ink);
+  margin-bottom: 6px; line-height: 1.3;
+}
+.award-org {
+  font-size: .8rem; color: var(--pink-mid); font-weight: 500; margin-bottom: 10px;
+}
+.award-org.teal { color: var(--teal-mid); }
+.award-desc {
+  font-size: .83rem; line-height: 1.7; color: var(--ink-muted);
+}
+.award-year {
+  display: inline-block; margin-top: 14px;
+  font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--pink-soft); color: var(--pink-mid);
+  padding: 3px 10px; border-radius: 20px; font-weight: 500;
+}
+.award-year.teal { background: var(--teal-soft); color: var(--teal-mid); }
+
 /* footer */
 footer {
   padding: 36px 80px;
@@ -627,6 +696,7 @@ footer {
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#goals">Goals</a></li>
+    <li><a href="#accomplishments">Awards</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -804,6 +874,73 @@ footer {
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- accomplishments -->
+<section id="accomplishments">
+  <div class="section-inner">
+    <div class="section-tag reveal">Accomplishments</div>
+    <h2 class="section-heading reveal">Honours & <em>Distinctions</em></h2>
+    <p class="section-body reveal">A record of awards, recognitions, and milestones along the way — each one a reminder of why I keep going. 🏅</p>
+
+    <div class="awards-grid">
+
+      <div class="award-card reveal">
+        <div class="award-seal">🏆</div>
+        <div class="award-category">Grant · Community Health</div>
+        <div class="award-title">$1,000 Youth Safety Grant</div>
+        <div class="award-org">Parachute Canada</div>
+        <div class="award-desc">Awarded funding to design and launch a youth-led e-scooter road safety initiative in Oakville.</div>
+        <span class="award-year">2025</span>
+      </div>
+
+      <div class="award-card reveal">
+        <div class="award-seal teal">🎖️</div>
+        <div class="award-category">Recognition · Leadership</div>
+        <div class="award-title">PEACE Youth Leader Certificate</div>
+        <div class="award-org teal">Halton Regional Police Services</div>
+        <div class="award-desc">Completed an intensive 11-week leadership and crisis intervention program with HRPS.</div>
+        <span class="award-year teal">2025</span>
+      </div>
+
+      <div class="award-card reveal">
+        <div class="award-seal">🌸</div>
+        <div class="award-category">Add your award category</div>
+        <div class="award-title">Your Award Title Here</div>
+        <div class="award-org">Awarding Organisation</div>
+        <div class="award-desc">A short description of what you achieved and why it matters to you.</div>
+        <span class="award-year">2025</span>
+      </div>
+
+      <div class="award-card reveal">
+        <div class="award-seal teal">🧬</div>
+        <div class="award-category">Add your award category</div>
+        <div class="award-title">Your Award Title Here</div>
+        <div class="award-org teal">Awarding Organisation</div>
+        <div class="award-desc">A short description of what you achieved and why it matters to you.</div>
+        <span class="award-year teal">2026</span>
+      </div>
+
+      <div class="award-card reveal">
+        <div class="award-seal">💊</div>
+        <div class="award-category">Add your award category</div>
+        <div class="award-title">Your Award Title Here</div>
+        <div class="award-org">Awarding Organisation</div>
+        <div class="award-desc">A short description of what you achieved and why it matters to you.</div>
+        <span class="award-year">2025</span>
+      </div>
+
+      <div class="award-card reveal">
+        <div class="award-seal teal">⭐</div>
+        <div class="award-category">Add your award category</div>
+        <div class="award-title">Your Award Title Here</div>
+        <div class="award-org teal">Awarding Organisation</div>
+        <div class="award-desc">A short description of what you achieved and why it matters to you.</div>
+        <span class="award-year teal">2026</span>
+      </div>
+
     </div>
   </div>
 </section>
